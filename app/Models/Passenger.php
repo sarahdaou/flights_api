@@ -9,7 +9,4 @@ class Passenger extends Model
 {
     use HasFactory;
 
-   public static function customAll(){
-    return 'sarah';
-   }
 };

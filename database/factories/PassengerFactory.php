@@ -26,8 +26,7 @@ class PassengerFactory extends Factory
         'email' => $this->faker->unique()->safeEmail,
         'password' => $this->faker->password(),
         'date_of_birth' => $this->faker->date(),
-        'passport_expiry_date' => $this->faker->date(),
-        
+        'passport_expiry_date' => $this->faker->dateTimeBetween('+1 years', '+ 10 years'),
         ];
     }
 }
