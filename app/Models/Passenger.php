@@ -17,4 +17,5 @@ class Passenger extends Model
         'date_of_birth',
         'passport_expiry_date'
     ];
+    
 };
