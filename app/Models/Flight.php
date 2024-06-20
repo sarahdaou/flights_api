@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Flight extends Model
 {
@@ -14,7 +15,7 @@ class Flight extends Model
         'timestamps'
     ];
 
-    public function passengers()
+    public function passengers(): BelongsToMany
     {
         return $this->belongsToMany(Passenger::class, 'flight_passenger');
     }
