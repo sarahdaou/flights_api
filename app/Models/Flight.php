@@ -14,4 +14,9 @@ class Flight extends Model
         'timestamps'
     ];
 
-}
+    public function passengers()
+    {
+        return $this->belongsToMany(Passenger::class, 'flight_passenger');
+    }
+
+};
