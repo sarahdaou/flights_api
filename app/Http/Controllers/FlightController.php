@@ -30,8 +30,6 @@ class FlightController extends Controller
 
     public function show(Flight $flight)
     {
-        $flight->load('passengers');
-
-        return response()->json($flight->passengers);
+        return response()->json($flight->load('passengers'));
     }
 }
