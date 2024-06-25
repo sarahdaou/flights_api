@@ -27,14 +27,14 @@ class PassengerController extends Controller
         return response()->json($passengers);
     }
 
-    public function flights($passengerId)
-    {
-        // Retrieve the passenger by ID
-        $passenger = Passenger::findOrFail($passengerId);
+    // public function flights($passengerId)
+    // {
+    //     // Retrieve the passenger by ID
+    //     $passenger = Passenger::findOrFail($passengerId);
 
-        // Eager load flights associated with the passenger
-        $passenger->load('flights');
+    //     // Eager load flights associated with the passenger
+    //     $passenger->load('flights');
 
-        return response()->json($passenger->flights);
-    }
+    //     return response()->json($passenger->flights);
+    // }
 }
