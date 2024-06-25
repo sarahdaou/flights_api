@@ -10,11 +10,11 @@ use Illuminate\Support\Facades\Validator;
 
 class FlightController extends Controller
 {
-    public function allFlights()
-    {
-        // Retrieve all flights with passengers eager loaded
-        $flights = Flight::with('passengers')->get();
+    // public function allFlights()
+    // {
+    //     // Retrieve all flights with passengers eager loaded
+    //     $flights = Flight::with('passengers')->get();
 
-        return response()->json($flights);
-    }
+    //     return response()->json($flights);
+    // }
 }
