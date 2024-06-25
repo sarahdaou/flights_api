@@ -23,8 +23,16 @@ class FlightController extends Controller
             ])
             ->allowedSorts(['id','number', 'departure_city', 'arrival_city', 'departure_time', 'arrival_time'])
             ->with('passengers') 
-            ->paginate($request->get('per_page', 100));
+            ->paginate($request->get('per_page', 20));
 
         return response()->json($flights);
+    }
+
+    public function passengers($flightId)
+    {
+
+        $flight = Flight::with('passengers')->findOrFail($flightId);
+
+        return response()->json($flight->passengers);
     }
 }

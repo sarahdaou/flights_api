@@ -23,4 +23,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('/passengers', [PassengerController::class, 'index']);
 
- Route::get('/flights', [FlightController::class, 'index']);
+Route::get('/flights', [FlightController::class, 'index']);
+
+Route::get('/flights/{flightID}/passengers', [FlightController::class, 'passengers']);
