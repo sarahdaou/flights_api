@@ -21,6 +21,7 @@ class PassengerController extends Controller
                 AllowedFilter::exact('passport_expiry_date'),
             ])
             ->allowedSorts(['id','first_name', 'last_name', 'email', 'date_of_birth', 'passport_expiry_date'])
+            ->with('flights')
             ->paginate($request->get('per_page', 20));
 
         return response()->json($passengers);
