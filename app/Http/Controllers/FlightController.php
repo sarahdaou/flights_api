@@ -32,4 +32,41 @@ class FlightController extends Controller
     {
         return response()->json($flight->load('passengers'));
     }
+
+    public function store(Request $request)
+    {
+        $validatedData = $request->validate([
+            'number' => 'required|unique:flights,number',
+            'departure_city' => 'required',
+            'arrival_city' => 'required',
+            'departure_time' => 'required|date',
+            'arrival_time' => 'required|date|after:departure_time',
+        ]);
+
+        $flight = Flight::create($validatedData);
+
+        return response()->json($flight);
+    }
+
+    public function update(Request $request, Flight $flight)
+    {
+        $validatedData = $request->validate([
+            'number' => 'required|unique:flights,number,' . $flight->id,
+            'departure_city' => 'required',
+            'arrival_city' => 'required',
+            'departure_time' => 'required|date',
+            'arrival_time' => 'required|date|after:departure_time',
+        ]);
+
+        $flight->update($validatedData);
+
+        return response()->json($flight);
+    }
+
+    public function destroy(Flight $flight)
+    {
+        $flight->delete();
+
+        return response()->json(['message' => 'Flight deleted']);
+    }
 }

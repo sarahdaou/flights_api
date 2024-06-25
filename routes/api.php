@@ -26,3 +26,17 @@ Route::get('/passengers', [PassengerController::class, 'index']);
 Route::get('/flights', [FlightController::class, 'index']);
 
 Route::get('/flights/{flight}', [FlightController::class, 'show']);
+
+Route::post('/flights', [FlightController::class, 'store']);
+
+Route::put('/flights/{flight}', [FlightController::class, 'update']);
+
+Route::delete('/flights/{flight}', [FlightController::class, 'destroy']);
+
+Route::get('/passengers/{passenger}', [PassengerController::class, 'show']);
+
+Route::post('/passengers', [PassengerController::class, 'store']);
+
+Route::put('/passengers/{passenger}', [PassengerController::class, 'update']);
+
+Route::delete('/passengers/{passenger}', [PassengerController::class, 'destroy']);

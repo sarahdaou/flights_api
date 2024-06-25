@@ -27,14 +27,56 @@ class PassengerController extends Controller
         return response()->json($passengers);
     }
 
-    // public function flights($passengerId)
-    // {
-    //     // Retrieve the passenger by ID
-    //     $passenger = Passenger::findOrFail($passengerId);
+    public function show(Passenger $passenger)
+    {
+        return response()->json($passenger->load('flights'));
+    }
 
-    //     // Eager load flights associated with the passenger
-    //     $passenger->load('flights');
+    public function store(Request $request)
+    {
+        $validatedData = $request->validate([
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'email' => 'required',
+            'password' => 'required',
+            'date_of_birth' => 'required|date',
+            'passport_expiry_date' => [
+                'required',
+                'date',
+                'after:' . now()->addYear()->toDateString(),
+                'before:' . now()->addYears(10)->toDateString(),
+            ],
+        ]);
 
-    //     return response()->json($passenger->flights);
-    // }
+        $passenger = Passenger::create($validatedData);
+
+        return response()->json($passenger);
+    }
+
+    public function update(Request $request, Passenger $passenger)
+    {
+        $validatedData = $request->validate([
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'email' => 'required',
+            'date_of_birth' => 'required|date',
+            'passport_expiry_date' => [
+                'required',
+                'date',
+                'after:' . now()->addYear()->toDateString(),
+                'before:' . now()->addYears(10)->toDateString(),
+            ],
+        ]);
+
+        $passenger->update($validatedData);
+
+        return response()->json($passenger);
+    }
+
+    public function destroy(Passenger $passenger)
+    {
+        $passenger->delete();
+
+        return response()->json(['message' => 'Passenger deleted']);
+    }
 }
