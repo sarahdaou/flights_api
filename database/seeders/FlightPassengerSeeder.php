@@ -17,11 +17,12 @@ class FlightPassengerSeeder extends Seeder
         $flights = Flight::all();
         $passengers = Passenger::all();
 
-        $flights->each(function($flight) use ($passengers){
-            $flight->passengers()->attach(
-                $passengers->random(rand(1,3))->pluck('id')->toArray(),['created_at' => now(), 'updated_at' => now()]
+        $passengers->each(function($passenger) use ($flights) {
+           
+            $passenger->flights()->attach(
+                $flights->random(rand(1, 3))->pluck('id')->toArray(),
+                ['created_at' => now(), 'updated_at' => now()]
             );
-
         });
     }
 }
