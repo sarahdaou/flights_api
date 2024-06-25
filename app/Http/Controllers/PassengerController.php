@@ -59,6 +59,7 @@ class PassengerController extends Controller
             'first_name' => 'required',
             'last_name' => 'required',
             'email' => 'required',
+            'password' => 'required',
             'date_of_birth' => 'required|date',
             'passport_expiry_date' => [
                 'required',
