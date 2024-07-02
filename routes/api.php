@@ -43,7 +43,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::apiResource('passengers', PassengerController::class);
-Route::apiResource('flights', PassengerController::class);
+
+Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
+    Route::apiResource('flights', PassengerController::class);
+});
 
 // GET           /users                      index   users.index
 // POST          /users                      store   users.store

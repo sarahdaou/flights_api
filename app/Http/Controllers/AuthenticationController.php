@@ -1,15 +1,18 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use App\Models\User;
 
 class AuthenticationController extends Controller
 {
     public function register(Request $request)
     {
+        // $userRole = Role::create(['name' => 'user']);
+
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
@@ -21,6 +24,8 @@ class AuthenticationController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
+
+        $user->assignRole('user');
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
