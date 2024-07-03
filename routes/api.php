@@ -42,10 +42,16 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::apiResource('passengers', PassengerController::class);
+Route::middleware(['auth:sanctum'])->group(function () {
+    // Routes accessible by all authenticated 
+    Route::apiResource('passengers', PassengerController::class)->only(['index', 'show']);
+    Route::apiResource('flights', FlightController::class)->only(['index', 'show']);
 
-Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
-    Route::apiResource('flights', PassengerController::class);
+    // Routes accessible by only admin 
+    Route::middleware(['role:admin'])->group(function () {
+        Route::apiResource('passengers', PassengerController::class)->except(['index', 'show']);
+        Route::apiResource('flights', FlightController::class)->except(['index', 'show']);
+    });
 });
 
 // GET           /users                      index   users.index
