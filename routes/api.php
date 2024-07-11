@@ -16,10 +16,11 @@ use App\Http\Controllers\AuthenticationController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+Route::middleware('throttle:60,1')->group(function () {
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
-});
+    });
 
 
 // Route::get('/flights', [FlightController::class, 'index']);
@@ -34,24 +35,28 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 // Route::put('/passengers/{passenger}', [PassengerController::class, 'update']);
 // Route::delete('/passengers/{passenger}', [PassengerController::class, 'destroy']);
 
-Route::post('/register', [AuthenticationController::class, 'register']);
-Route::post('/login', [AuthenticationController::class, 'login']);
-Route::middleware('auth:sanctum')->post('/logout', [AuthenticationController::class, 'logout']);
+    Route::post('/register', [AuthenticationController::class, 'register']);
+    Route::post('/login', [AuthenticationController::class, 'login']);
+    Route::middleware('auth:sanctum')->post('/logout', [AuthenticationController::class, 'logout']);
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
-Route::middleware(['auth:sanctum'])->group(function () {
-    // Routes accessible by all authenticated 
-    Route::apiResource('passengers', PassengerController::class)->only(['index', 'show']);
-    Route::apiResource('flights', FlightController::class)->only(['index', 'show']);
-
-    // Routes accessible by only admin 
-    Route::middleware(['role:admin'])->group(function () {
-        Route::apiResource('passengers', PassengerController::class)->except(['index', 'show']);
-        Route::apiResource('flights', FlightController::class)->except(['index', 'show']);
+    Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+        return $request->user();
     });
+
+    Route::middleware(['auth:sanctum'])->group(function () {
+        // Routes accessible by all authenticated 
+        Route::apiResource('passengers', PassengerController::class)->only(['index', 'show']);
+        Route::apiResource('flights', FlightController::class)->only(['index', 'show']);
+
+        // Routes accessible by only admin 
+        Route::middleware(['role:admin'])->group(function () {
+            Route::apiResource('passengers', PassengerController::class);
+            Route::apiResource('flights', FlightController::class);
+        });
+    });
+
+    Route::get('/export', [PassengerController::class, 'export'])->name('export.passengers');
+
 });
 
 // GET           /users                      index   users.index

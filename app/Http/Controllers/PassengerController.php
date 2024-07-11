@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Passenger;
 use Illuminate\Http\Request;
+use App\Exports\PassengerExport;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Cache;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedFilter;
 
@@ -23,6 +26,10 @@ class PassengerController extends Controller
             ->allowedSorts(['id','first_name', 'last_name', 'email', 'date_of_birth', 'passport_expiry_date'])
             ->with('flights')
             ->paginate($request->get('per_page', 20));
+
+            $passengers = Cache::remember('passengers', 3600, function () {
+                return Passenger::all();
+            });
 
         return response()->json($passengers);
     }
@@ -50,6 +57,8 @@ class PassengerController extends Controller
 
         $passenger = Passenger::create($validatedData);
 
+        Cache::forget('passengers');
+
         return response()->json($passenger);
     }
 
@@ -71,6 +80,8 @@ class PassengerController extends Controller
 
         $passenger->update($validatedData);
 
+        Cache::forget('passengers');
+
         return response()->json($passenger);
     }
 
@@ -78,6 +89,14 @@ class PassengerController extends Controller
     {
         $passenger->delete();
 
+        Cache::forget('passengers');
+
         return response()->json(['message' => 'Passenger deleted']);
     }
+
+    public function export()
+    {
+        return Excel::download(new PassengerExport, 'passengers.xlsx');
+    }
+
 }
