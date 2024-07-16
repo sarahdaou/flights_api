@@ -29,7 +29,7 @@ class AuthenticationController extends Controller
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
-        return response()->json(['access_token' => $token, 'token_type' => 'Bearer']);
+        return response(['access_token' => $token, 'token_type' => 'Bearer']);
     }
 
     public function login(Request $request)
@@ -40,20 +40,20 @@ class AuthenticationController extends Controller
         ]);
 
         if (!Auth::attempt($request->only('email', 'password'))) {
-            return response()->json(['message' => 'Invalid login details'], 401);
+            return response(['message' => 'Invalid login details'], 401);
         }
 
         $user = User::where('email', $request['email'])->firstOrFail();
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
-        return response()->json(['message' => 'login successful', 'access_token' => $token, 'token_type' => 'Bearer']);
+        return response(['message' => 'login successful', 'access_token' => $token, 'token_type' => 'Bearer']);
     }
 
     public function logout(Request $request)
     {
         $request->user()->tokens()->delete();
 
-        return response()->json(['message' => 'Logged out successfully']);
+        return response(['message' => 'Logged out successfully']);
     }
 }

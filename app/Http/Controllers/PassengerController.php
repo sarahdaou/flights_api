@@ -14,29 +14,28 @@ class PassengerController extends Controller
 {
     public function index(Request $request)
     {
-        $passengers = QueryBuilder::for(Passenger::class)
-            ->allowedFilters([
-                AllowedFilter::exact('id'),
-                AllowedFilter::partial('first_name'),
-                AllowedFilter::partial('last_name'),
-                AllowedFilter::partial('email'),
-                AllowedFilter::exact('date_of_birth'),
-                AllowedFilter::exact('passport_expiry_date'),
-            ])
-            ->allowedSorts(['id','first_name', 'last_name', 'email', 'date_of_birth', 'passport_expiry_date'])
-            ->with('flights')
-            ->paginate($request->get('per_page', 20));
-
-            $passengers = Cache::remember('passengers', 3600, function () {
-                return Passenger::all();
-            });
-
-        return response()->json($passengers);
+        $cacheKey = 'passengers_' . md5(json_encode($request->query()));
+        $passengers = Cache::remember($cacheKey, 3600, function () use ($request) {
+            return QueryBuilder::for(Passenger::class)
+                ->allowedFilters([
+                    AllowedFilter::exact('id'),
+                    AllowedFilter::partial('first_name'),
+                    AllowedFilter::partial('last_name'),
+                    AllowedFilter::partial('email'),
+                    AllowedFilter::exact('date_of_birth'),
+                    AllowedFilter::exact('passport_expiry_date'),
+                ])
+                ->allowedSorts(['id', 'first_name', 'last_name', 'email', 'date_of_birth', 'passport_expiry_date'])
+                ->with('flights')
+                ->paginate($request->get('per_page', 20));
+        });
+    
+        return response($passengers);
     }
 
     public function show(Passenger $passenger)
     {
-        return response()->json($passenger->load('flights'));
+        return response($passenger->load('flights'));
     }
 
     public function store(Request $request)
@@ -57,9 +56,7 @@ class PassengerController extends Controller
 
         $passenger = Passenger::create($validatedData);
 
-        Cache::forget('passengers');
-
-        return response()->json($passenger);
+        return response($passenger);
     }
 
     public function update(Request $request, Passenger $passenger)
@@ -80,18 +77,14 @@ class PassengerController extends Controller
 
         $passenger->update($validatedData);
 
-        Cache::forget('passengers');
-
-        return response()->json($passenger);
+        return response($passenger);
     }
 
     public function destroy(Passenger $passenger)
     {
         $passenger->delete();
 
-        Cache::forget('passengers');
-
-        return response()->json(['message' => 'Passenger deleted']);
+        return response(['message' => 'Passenger deleted']);
     }
 
     public function export()

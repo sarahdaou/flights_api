@@ -25,12 +25,12 @@ class FlightController extends Controller
             ->with('passengers') 
             ->paginate($request->get('per_page', 20));
 
-        return response()->json($flights);
+        return response($flights);
     }
 
     public function show(Flight $flight)
     {
-        return response()->json($flight->load('passengers'));
+        return response($flight->load('passengers'));
     }
 
     public function store(Request $request)
@@ -45,7 +45,7 @@ class FlightController extends Controller
 
         $flight = Flight::create($validatedData);
 
-        return response()->json($flight);
+        return response($flight);
     }
 
     public function update(Request $request, Flight $flight)
@@ -60,13 +60,13 @@ class FlightController extends Controller
 
         $flight->update($validatedData);
 
-        return response()->json($flight);
+        return response($flight);
     }
 
     public function destroy(Flight $flight)
     {
         $flight->delete();
 
-        return response()->json(['message' => 'Flight deleted']);
+        return response(['message' => 'Flight deleted']);
     }
 }
