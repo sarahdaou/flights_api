@@ -19,13 +19,14 @@ class PassengerController extends Controller
             return QueryBuilder::for(Passenger::class)
                 ->allowedFilters([
                     AllowedFilter::exact('id'),
-                    AllowedFilter::partial('first_name'),
-                    AllowedFilter::partial('last_name'),
-                    AllowedFilter::partial('email'),
+                    'first_name',
+                    'last_name',
+                    'email',
                     AllowedFilter::exact('date_of_birth'),
                     AllowedFilter::exact('passport_expiry_date'),
                 ])
-                ->allowedSorts(['id', 'first_name', 'last_name', 'email', 'date_of_birth', 'passport_expiry_date'])
+                ->allowedSorts(['first_name','created_at'])
+                ->defaultSorts('updated_at')
                 ->with('flights')
                 ->paginate($request->get('per_page', 20));
         });

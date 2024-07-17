@@ -14,7 +14,7 @@ class PassengerExport implements FromCollection, WithHeadings
     public function collection()
     {
         // Adjust the fields to exclude sensitive data like password
-        return Passenger::select('first_name', 'last_name', 'email', 'date_of_birth', 'passport_expiry_date')->get();
+        return Passenger::select('first_name', 'last_name', 'email', 'date_of_birth', 'passport_expiry_date','created_at','updated_at')->get();
     }
 
     public function headings(): array

@@ -15,13 +15,14 @@ class FlightController extends Controller
         $flights = QueryBuilder::for(Flight::class)
             ->allowedFilters([
                 AllowedFilter::exact('id'),
-                AllowedFilter::partial('number'),
-                AllowedFilter::partial('departure_city'),
-                AllowedFilter::partial('arrival_city'),
-                AllowedFilter::partial('departure_time'),
-                AllowedFilter::partial('arrival_time'),
+                'number',
+                'departure_city',
+                'arrival_city',
+                'departure_time',
+                'arrival_time',
             ])
-            ->allowedSorts(['id','number', 'departure_city', 'arrival_city', 'departure_time', 'arrival_time'])
+            ->allowedSorts(['departure_city', 'arrival_city', 'departure_time', 'arrival_time'])
+            ->defaultSorts('number')
             ->with('passengers') 
             ->paginate($request->get('per_page', 20));
 
