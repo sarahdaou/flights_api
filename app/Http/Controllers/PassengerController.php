@@ -26,7 +26,7 @@ class PassengerController extends Controller
                     AllowedFilter::exact('passport_expiry_date'),
                 ])
                 ->allowedSorts(['first_name','created_at'])
-                ->defaultSorts('updated_at')
+                ->defaultSorts('-updated_at')
                 ->with('flights')
                 ->paginate($request->get('per_page', 20));
         });

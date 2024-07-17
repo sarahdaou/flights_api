@@ -21,8 +21,8 @@ class FlightController extends Controller
                 'departure_time',
                 'arrival_time',
             ])
-            ->allowedSorts(['departure_city', 'arrival_city', 'departure_time', 'arrival_time'])
-            ->defaultSorts('number')
+            ->allowedSorts(['departure_city', 'arrival_city', 'departure_time', 'arrival_time','created_at'])
+            ->defaultSorts('-updated_at')
             ->with('passengers') 
             ->paginate($request->get('per_page', 20));
 
